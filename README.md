@@ -33,206 +33,109 @@
                     优点：不用反复编译源码文件。
                     缺点：需要租用服务器，成本高，部署也麻烦，网络不稳定就无法使用。
 
-3.现代方法：  在EA参数输入秘钥码。EA解析出授权账号和此账号的到期时间。
+3.单机方法：  在EA参数输入秘钥码。EA解析出授权账号和此账号的到期时间。
                      优点：不用反复修改源码，不用读取网络API接口，只需生成秘钥，发送给客户，即可实现授权，追加授权等。效率高，体验好。
 
 
 
 
-图片
-单机模式           免费生成秘钥(认证ID，免费使用 ,免费生成秘钥(认证ID，免费使用
-单机模式           适合个人 与 小团队
+单机模式
 
 服务端:
-       
-        复制文件（MTx_acc_admin_server_client_20260329.exe）到桌面双击
+	
+	复制文件（MTx_acc_admin_server_client.exe）到桌面双击 
 
-        账号:my0622     ==> 账号公开的,仅供测试，请勿作为业务开展
+	账号:  my0622     ==> 账号公开的,仅供测试，请勿作为业务开展
 
-        账号: 123456       //你要加密的MT5 MT4账号
-        程序: 123456_M5EA
+          登录成功后在账号建立下输入
 
-        点击  认证ID/单机复制
+	账号:         123456            //你要加密的MT5账号
+	程序名/密码:  you_password     //你的策略密码 6位数以上
+
+          账号为空或者0 不限账号,时间为空 不限时间
+	点击  认证ID/单机复制 即可生成密钥
 
 
 MT5MT4客户端:
 
-        1.encrypted_library_mt5_mt4.ex5 与 EA指标文件放一起
-            EA文件放MQL5-> Experts  ,指标文件放MQL5-> Indicators
+        1.仿案例把代码植入自己的源码，点击编写即可
 
-        2.客户端加载,参数输入 认证ID 即可
+	2.encrypted_library_mt5_mt4.ex5 与 EA指标文件放一起
+  	  EA文件放MQL5-> Experts  ,指标文件放MQL5-> Indicators
+        
+	3.客户端加载,参数输入 认证ID 即可
 
-        //---mt4 操作流程与上述操作一致
+	//---mt4 操作流程与上述操作一致
 
 
-网络模式    有偿使用，适合一定规模公司
-网络模式
 网络模式
 
 服务端:
 
-        准备一个香港(境外也可以)服务器，推荐阿里云
-        复制文件（MTx_acc_admin_server_client_20260329.exe）到桌面双击
+	准备一个香港(境外也可以)服务器，推荐阿里云
+	复制文件（MTx_acc_admin_server_client.exe）到桌面双击 
 
-        账号:my0622     ==> 账号公开的,仅供测试，请勿作为业务开展
+	账号:my0622     ==> 账号公开的,仅供测试，请勿作为业务开展
 
-        登录后点击tcp通讯，启动监听即可  
+	登录后点击tcp通讯，启动监听即可  
 
 MT5MT4客户端:
 
-        1.双击打开案例(M5EA 客户端 后缀为mql5 的文件
+	1.双击打开案例(M5EA 客户端 后缀为mql5 的文件
 
-        2.仿案例把代码植入自己的源码，ip格式(127.0.0.1)换成自己的(即你购买的服务器地址，点击编写即可
+	2.仿案例把代码植入自己的源码，ip格式(127.0.0.1)换成自己的(即你购买的服务器地址，点击编写即可
 
-        3.encrypted_library_mt5_mt4.ex5 与 EA指标文件放一起
-            EA文件放MQL5-> Experts  ,指标文件放MQL5-> Indicators
+	3.encrypted_library_mt5_mt4.ex5 与 EA指标文件放一起
+  	  EA文件放MQL5-> Experts  ,指标文件放MQL5-> Indicators
+        
+	4.客户端加载后后与服务器通讯，并自动建立档案,可在tcp通讯日志查看
 
-        4.客户端加载后后与服务器通讯，并自动建立档案,可在tcp通讯日志查看
+	//---mt4 操作流程与上述操作一致
 
-        //---mt4 操作流程与上述操作一致
-
-
-//--单机模式加密案例
-//--单机模式加密案例
-//--单机模式加密案例
+//---原创作者大树My05613828
+//---技术支持微信: ytkj0622
 
 
 
-//---以下是引入加密函数
-#import "encrypted_library_mt5_mt4.ex5"
-boolauthid_root(string _authid,string _EAZB_tag,string _EAZB_name,bool _allow_alert =true);
-#import
-//---以上是引入加密函数
+MT5 MT4账号授权管理系统
 
-inputstring authid = "请输入认证ID";
+                          __江苏宇桐科技有限责任公司
+      
 
-intOnInit()//---入口函数每个程序都会有 且 唯一 旧版本为Init()
-  {
-//---依次 认证ID ，标识("EA" 或者 "ZB")，策略名称(全英文)， 弹窗提醒
-   authid_root(authid,"EA","M5EA",true);
+0.主要为管理MT5 MT4 账号，EA指标授权设计；
 
-   return(INIT_SUCCEEDED);
-  }
-//+------------------------------------------------------------------+
-voidOnTick()//---主函数每个程序都会有 且 唯一 旧版本为start()
-  {
-//---依次 认证ID ，标识("EA" 或者 "ZB")，策略名称(全英文)， 弹窗提醒
-   authid_root(authid,"EA","M5EA",true);
+1.单机模式:生成密钥(认证ID),客户端直接输入密钥，无需联网即可授权!
 
-  }
-//+------------------------------------------------------------------+
+2.联网模式:需与客户端通讯，实现远程监控到期 移除EA、指标等；
 
+账号建立 
+  1.账号必须是5(含）位数以上的数字 不可为空
+  2.程序名为主键不可为空
+  3.到期时间为空，则视为永久
+ 
 
-//---指标加密
-/*
-int OnInit()//---入口函数每个程序都会有 且 唯一 旧版本为Init()
-  {
-//---依次 认证ID ，标识("EA" 或者 "ZB")，策略名称(全英文)， 弹窗提醒
-   authid_root(authid,"EA","M5EA",true);
-
-   return(INIT_SUCCEEDED);
-  }
-
-//+------------------------------------------------------------------+
-int OnCalculate(const int rates_total,
-                const int prev_calculated,
-                const datetime& time[],
-                const double& open[],
-                const double& high[],
-                const double& low[],
-                const double& close[],
-                const long& tick_volume[],
-                const long& volume[],
-                const int& spread[])
-  {
-
-//---依次 认证ID ，标识("EA" 或者 "ZB")，策略名称(全英文)， 弹窗提醒
-   authid_root(authid,"EA","M5EA",true);
-   
-return rates_total;
-  };
-
-//+------------------------------------------------------------------+
-*/
-图片
-//---下面是网络模式
-//---下面是网络模式
-//---下面是网络模式
-
-//---以下是引入加密函数
-
-#import "encrypted_library_mt5_mt4.ex5"
-
-boolEAZB_oninit(string _address,ushort _port,string _EAZB_tag,string _EAZB_name,bool _alert=true)
-;
-boolEAZB_ontick(bool _alert=true)
-;
-#import
-
-//---以上是引入加密函数
+账号查询
+  1.账号不为空账号优先
+  2.程序名不为空程序名优先
+  3.姓名不为空姓名优先
+  4.备注不为空备注优先
+  5.支持账号，姓名，程序名，备注模糊匹配
 
 
-input string ip = "127.0.0.1";
+右键菜单
+  2.右键菜单无正则限制,修改请慎重使用！
 
-intOnInit()//---入口函数每个程序都会有 且 唯一 旧版本为Init()
-  
-{
+          
 
-//---依次ip ，端口， 标识， 策略名称， 弹窗提醒
+使用注意事项：
+  0.请不要多点登录
+  1.服务器推荐香港的,无需备案即可直接使用
+  2.双击打开软件,点击tcp通讯,启动监听即可
 
-//---ip(换成你自己的服务器) 标识("EA" 或者 "ZB")  策略名称(全英文)
+  3.MT5 MT4客户端 "EA交易" 栏勾选允许dll
 
-   EAZB_oninit(ip,443,"EA","M5EA",true);
-   return(INIT_SUCCEEDED);
-  }
-//+------------------------------------------------------------------+
+  4.通讯正常请建立档案，账号,程序名为必填项
 
 
 
-//+------------------------------------------------------------------+
 
-voidOnTick()//---主函数每个程序都会有 且 唯一 旧版本为start()
-  
-{
-//---
-
-   EAZB_ontick(true);
-  }
-//+------------------------------------------------------------------+
-
-
-
-//---指标加密
-
-/*
-int OnInit()//---入口函数每个程序都会有 且 唯一 旧版本为Init()
-  {
-
-//---依次ip ，端口， 标识， 策略名称， 弹窗提醒
-//---ip(换成你自己的服务器) 标识("EA" 或者 "ZB")  策略名称(全英文)
-   EAZB_oninit(ip,443,"ZB","M5EA",true);
-   return(INIT_SUCCEEDED);
-  }
-
-//+------------------------------------------------------------------+
-int OnCalculate(const int rates_total,
-                const int prev_calculated,
-                const datetime& time[],
-                const double& open[],
-                const double& high[],
-                const double& low[],
-                const double& close[],
-                const long& tick_volume[],
-                const long& volume[],
-                const int& spread[])
-  {
-
-   EAZB_ontick(true);
-
- return rates_total;
-  };
-
-//+------------------------------------------------------------------+
-*/
-
-图片
